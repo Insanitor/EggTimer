@@ -5,11 +5,10 @@ import android.widget.TextView;
 
 public class EggTimer implements Runnable {
 
+    private int timer;
     private TextView textBox;
 
-    public int timer;
-
-    final Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     @Override
     public void run() {
@@ -21,21 +20,21 @@ public class EggTimer implements Runnable {
         }
     }
 
-    public EggTimer(TextView text) {
+    EggTimer(TextView text) {
         textBox = text;
     }
 
-    public void setTimer(int i)
+    void setTimer(int i)
     {
         timer = i;
     }
 
-    public int getTimer()
+    int getTimer()
     {
         return timer;
     }
-    
-    public String getTimeFormat(int timeInSeconds)
+
+    private String getTimeFormat(int timeInSeconds)
     {
         int minutes = timeInSeconds / 60;
         int seconds = timeInSeconds % 60;

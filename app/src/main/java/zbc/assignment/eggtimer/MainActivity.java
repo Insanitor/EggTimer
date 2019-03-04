@@ -1,39 +1,29 @@
 package zbc.assignment.eggtimer;
 
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EggTimerListener {
 
+    TextView tv;
     EggTimer eggTimer;
-
-    private TextView tv;
-    private Button startButton;
-    private ImageButton softButton, smileButton, hardButton;
-
-    enum EggType {Soft, Smiling, Hard}
-
     EggType currentEgg;
-    final Handler handler = new Handler();
-    static boolean firstCreate = false;
+    Button startButton;
+    ImageButton softButton, smileButton, hardButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        firstCreate = true;
         tv = findViewById(R.id.TimerText);
         startButton = findViewById(R.id.StartButton);
         softButton = findViewById(R.id.SoftBoilButton);
         smileButton = findViewById(R.id.SmilingButton);
         hardButton = findViewById(R.id.HardButton);
-        eggTimer = new EggTimer(tv);
-
     }
 
     public void OnEggSelectClicked(View view) {
@@ -43,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
                 currentEgg = EggType.Soft;
                 startButton.setEnabled(true);
-                eggTimer.setTimer(5 * 60);
                 tv.setText("5:00");
                 break;
             }
@@ -51,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
 
                 currentEgg = EggType.Smiling;
                 startButton.setEnabled(true);
-                eggTimer.setTimer(7 * 60);
                 tv.setText("7:00");
                 break;
             }
@@ -59,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
                 currentEgg = EggType.Hard;
                 startButton.setEnabled(true);
-                eggTimer.setTimer(10 * 60);
                 tv.setText("10:00");
                 break;
             }
@@ -68,32 +55,40 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-//    public void OnEggSelectClicked(View view) {
-//        eggTimer.OnEggSelectClicked(view);
-//    }
-
     public void onStartClick(final View view) {
-        if (eggTimer.getTimer() > 0) {
-            startButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onStop(view);
-                }
-            });
+        if (currentEgg != null) {
+            switch (currentEgg) {
+                case Soft:
+                    eggTimer = new EggTimer(5);
+                    break;
+                case Smiling:
+                    eggTimer = new EggTimer(7 * 60);
+                    break;
+                case Hard:
+                    eggTimer = new EggTimer(10 * 60);
+                    break;
+            }
+            eggTimer.addListener(this);
+            eggTimer.start();
             softButton.setEnabled(false);
             smileButton.setEnabled(false);
             hardButton.setEnabled(false);
             startButton.setText("Stop");
-            handler.postDelayed(eggTimer, 1000);
+            startButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onStop(v);
+                }
+            });
         }
     }
 
     public void onStop(final View view) {
-        eggTimer.setTimer(0);
+        eggTimer.removeListener(this);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onStartClick(view);
+                onStartClick(v);
             }
         });
         startButton.setText("Start");
@@ -103,5 +98,36 @@ public class MainActivity extends AppCompatActivity {
         tv.setText("0:00");
 
     }
+
+    @Override
+    public void onCountDown(int timeLeft) {
+        tv.setText(timeLeft / 60 + ":" + timeLeft % 60);
+    }
+
+    @Override
+    public void OnEggTimerStopped() {
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStartClick(v);
+            }
+        });
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startButton.setText("Start");
+                tv.setText("0:00");
+                softButton.setEnabled(true);
+                smileButton.setEnabled(true);
+                hardButton.setEnabled(true);
+                currentEgg = null;
+            }
+        });
+
+        eggTimer.removeListener(this);
+    }
+
+    enum EggType {Soft, Smiling, Hard}
 
 }

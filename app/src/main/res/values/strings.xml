@@ -4,6 +4,7 @@
     <string name="SmilingBoil">Smilende</string>
     <string name="HardBoil">Hårdkogt</string>
     <string name="StartButton">Start</string>
-    <string name="TimerLabel">Tid</string>
-    <string name="TimerText">05:00</string>
+    <string name="TimerLabel">Tid tilbage</string>
+    <string name="TimerText">0:00</string>
+    <string name="ChooseText">Vælg dit æg</string>
 </resources>

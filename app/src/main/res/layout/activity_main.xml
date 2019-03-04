@@ -4,74 +4,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAppBackground"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/SoftBoilButton"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/topText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:onClick="OnEggSelectClicked"
-        android:text="@string/SoftBoil"
-        app:layout_constraintBottom_toTopOf="@+id/TimerLabelText"
+        android:text="@string/ChooseText"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/SmilingButton"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/SoftBoilButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:background="@null"
+        android:onClick="OnEggSelectClicked"
+        android:scaleType="fitCenter"
+        app:layout_constraintEnd_toStartOf="@+id/SmilingButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/SmilingButton"
+        app:srcCompat="@drawable/ic_soft" />
+
+    <TextView
+        android:id="@+id/SoftText"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="@string/SmilingBoil"
-        app:layout_constraintBottom_toTopOf="@+id/TimerLabelText"
+        android:layout_marginTop="8dp"
+        android:text="@string/SoftBoil"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/SoftBoilButton"
+        app:layout_constraintTop_toBottomOf="@+id/SoftBoilButton" />
+
+    <ImageButton
+        android:id="@+id/SmilingButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:background="@null"
+        android:onClick="OnEggSelectClicked"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toStartOf="@+id/HardButton"
         app:layout_constraintStart_toEndOf="@+id/SoftBoilButton"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="OnEggSelectClicked" />
+        app:layout_constraintTop_toBottomOf="@+id/topText"
+        app:srcCompat="@drawable/ic_medium" />
 
-    <Button
-        android:id="@+id/HardButton"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/SmilingText"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:text="@string/HardBoil"
-        app:layout_constraintBottom_toTopOf="@+id/TimerLabelText"
+        android:layout_marginTop="8dp"
+        android:text="@string/SmilingBoil"
+        android:textColor="#000000"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/SmilingButton"
+        app:layout_constraintTop_toBottomOf="@+id/SmilingButton" />
+
+    <ImageButton
+        android:id="@+id/HardButton"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@null"
+        android:onClick="OnEggSelectClicked"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:onClick="OnEggSelectClicked" />
+        app:layout_constraintStart_toEndOf="@+id/SmilingButton"
+        app:layout_constraintTop_toTopOf="@+id/SmilingButton"
+        app:srcCompat="@drawable/ic_hard" />
+
+    <TextView
+        android:id="@+id/HardText"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/HardBoil"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="@+id/HardButton"
+        app:layout_constraintTop_toBottomOf="@+id/HardButton" />
 
     <TextView
         android:id="@+id/TimerLabelText"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:text="@string/TimerLabel"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/TimerText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <TextView
         android:id="@+id/TimerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="@string/TimerText"
+        android:textAlignment="center"
+        android:textSize="36sp"
+        android:textColor="#000000"
         app:layout_constraintBottom_toTopOf="@+id/StartButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/StartButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
         android:enabled="false"
         android:onClick="onStartClick"
         android:text="@string/StartButton"
+        android:textSize="24sp"
+        android:background="#be7064"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 </android.support.constraint.ConstraintLayout>

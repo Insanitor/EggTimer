@@ -1,39 +1,60 @@
 package zbc.assignment.eggtimer;
 
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class EggTimer extends Thread {
 
-
-    List<EggTimerListener> listeners = new ArrayList<>();
+    List<EggTimerPresenter.View> listeners = new ArrayList<>();
     private int timer;
+
+    TimerState runningState, pendingState, currentState;
 
     public EggTimer() {
     }
 
     public EggTimer(int time) {
         timer = time;
+
+        runningState = new RunningState() {
+            @Override
+            public void start() {
+                if (timer > 0) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    timer--;
+                    for (EggTimerPresenter.View l : listeners) {
+                        l.onCountDown(timer);
+                    }
+                    run();
+                } else {
+                    for (EggTimerPresenter.View l : listeners) {
+                        l.onEggTimerStopped();
+                        currentState = pendingState;
+                    }
+                }
+            }
+        };
+
+        pendingState = new PendingState() {
+            @Override
+            public void start() {
+                currentState = runningState;
+                currentState.start();
+            }
+        };
+
+        currentState = pendingState;
     }
 
     @Override
     public void run() {
-        if (timer > 0) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            timer--;
-            for (EggTimerListener l : listeners) {
-                l.onCountDown(timer);
-            }
-            run();
-        } else {
-            for (EggTimerListener l : listeners) {
-                l.OnEggTimerStopped();
-            }
-        }
+        currentState.start();
     }
 
     int getTimer() {
@@ -44,11 +65,11 @@ public class EggTimer extends Thread {
         timer = i;
     }
 
-    public void addListener(EggTimerListener listener) {
+    public void addListener(EggTimerPresenter.View listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(EggTimerListener listener) {
+    public void removeListener(EggTimerPresenter.View listener) {
 
         listeners.remove(listener);
     }

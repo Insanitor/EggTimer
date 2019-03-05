@@ -3,5 +3,5 @@ package zbc.assignment.eggtimer;
 public interface EggTimerListener {
     public void onCountDown(int timeLeft);
 
-    public void OnEggTimerStopped();
+    public void onEggTimerStopped();
 }

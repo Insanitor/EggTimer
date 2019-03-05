@@ -7,13 +7,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements EggTimerListener {
+public class MainActivity extends AppCompatActivity implements EggTimerPresenter.View {
 
     TextView tv;
-    EggTimer eggTimer;
     EggType currentEgg;
     Button startButton;
     ImageButton softButton, smileButton, hardButton;
+    EggTimerPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements EggTimerListener 
         softButton = findViewById(R.id.SoftBoilButton);
         smileButton = findViewById(R.id.SmilingButton);
         hardButton = findViewById(R.id.HardButton);
+        presenter = new EggTimerPresenter(this);
     }
 
     public void OnEggSelectClicked(View view) {
@@ -59,17 +60,15 @@ public class MainActivity extends AppCompatActivity implements EggTimerListener 
         if (currentEgg != null) {
             switch (currentEgg) {
                 case Soft:
-                    eggTimer = new EggTimer(5);
+                    presenter.start(5 * 60 );
                     break;
                 case Smiling:
-                    eggTimer = new EggTimer(7 * 60);
+                    presenter.start(7 * 60);
                     break;
                 case Hard:
-                    eggTimer = new EggTimer(10 * 60);
+                    presenter.start(10 * 60);
                     break;
             }
-            eggTimer.addListener(this);
-            eggTimer.start();
             softButton.setEnabled(false);
             smileButton.setEnabled(false);
             hardButton.setEnabled(false);
@@ -84,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements EggTimerListener 
     }
 
     public void onStop(final View view) {
-        eggTimer.removeListener(this);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,41 +94,43 @@ public class MainActivity extends AppCompatActivity implements EggTimerListener 
         smileButton.setEnabled(true);
         hardButton.setEnabled(true);
         tv.setText("0:00");
+        currentEgg = null;
+        presenter.stop();
 
     }
 
     @Override
-    public void onCountDown(int timeLeft) {
-        final int i = timeLeft;
+    public void onCountDown(int time) {
+        final int i = time;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 tv.setText(i / 60 + ":" + i % 60);
             }
         });
+
     }
 
     @Override
-    public void OnEggTimerStopped() {
+    public void onEggTimerStopped() {
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onStartClick(v);
+            }
+        });
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 startButton.setText("Start");
                 tv.setText("0:00");
-                startButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onStartClick(v);
-                    }
-                });
                 softButton.setEnabled(true);
                 smileButton.setEnabled(true);
                 hardButton.setEnabled(true);
                 currentEgg = null;
             }
         });
-
-        eggTimer.removeListener(this);
     }
 
     enum EggType {Soft, Smiling, Hard}

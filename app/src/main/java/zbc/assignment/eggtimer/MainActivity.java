@@ -101,23 +101,28 @@ public class MainActivity extends AppCompatActivity implements EggTimerListener 
 
     @Override
     public void onCountDown(int timeLeft) {
-        tv.setText(timeLeft / 60 + ":" + timeLeft % 60);
+        final int i = timeLeft;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv.setText(i / 60 + ":" + i % 60);
+            }
+        });
     }
 
     @Override
     public void OnEggTimerStopped() {
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onStartClick(v);
-            }
-        });
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 startButton.setText("Start");
                 tv.setText("0:00");
+                startButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        onStartClick(v);
+                    }
+                });
                 softButton.setEnabled(true);
                 smileButton.setEnabled(true);
                 hardButton.setEnabled(true);
